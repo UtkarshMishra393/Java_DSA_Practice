@@ -1,0 +1,20 @@
+public class Main
+{
+	public static void main(String[] args) {
+		int rows = 3;
+		int cols = 3;
+		maze(1,1,rows,cols, "");
+	}
+	
+	static void maze(int sr, int sc, int rows, int cols, String ans){
+	    if(sr == rows && sc == cols){
+	        System.out.println(ans);
+	        return;
+	    }
+	    if(sr>rows || sc > cols){
+	        return;
+	    }
+	    maze(sr, sc+1, rows, cols, ans + "R");
+	    maze(sr+1, sc, rows, cols, ans + "D");
+	}
+}
