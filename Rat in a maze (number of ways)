@@ -1,0 +1,23 @@
+public class Main
+{
+	public static void main(String[] args) {
+		int rows = 4;
+		int cols = 6;
+		int count = maze(1,1,rows,cols);
+		System.out.println(count);
+	}
+	
+	static int maze(int sr, int sc, int rows, int cols){
+	    if(sr == rows || sc == cols){
+	        return 1;
+	    }
+	    if(sr>rows || sc > cols){
+	        return 0;
+	    }
+	    return maze(sr, sc+1, rows, cols) + maze(sr+1, sc, rows, cols);
+	}
+}
+
+
+
+
