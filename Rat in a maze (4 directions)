@@ -1,0 +1,30 @@
+public class Main
+{
+	public static void main(String[] args) {
+		int rows = 3;
+		int cols = 3;
+		boolean[][] arr = new boolean[rows][cols];
+		maze(0,0,rows-1,cols-1, "", arr);
+	}
+	
+	static void maze(int sr, int sc, int rows, int cols, String ans, boolean[][] arr){
+	    if(sr<0 || sc<0 || sr>rows || sc > cols){
+	        return;
+	    }
+	    if(arr[sr][sc]==true){
+	        return;
+	    }
+	    if(sr == rows && sc == cols){
+	        System.out.println(ans);
+	        return;
+	    }
+	    arr[sr][sc] = true;
+	    maze(sr, sc+1, rows, cols, ans + "R", arr);
+	    maze(sr+1, sc, rows, cols, ans + "D", arr);
+	    maze(sr-1, sc, rows, cols, ans + "U", arr);
+	    maze(sr, sc-1, rows, cols, ans + "L", arr);
+
+    //  here we have applied backtracking
+	    arr[sr][sc] = false;
+	}
+}
