@@ -26,6 +26,8 @@ public class Main
 	    maze(sr+1, sc, rows, cols, ans + "D", arr);
 	    maze(sr-1, sc, rows, cols, ans + "U", arr);
 	    maze(sr, sc-1, rows, cols, ans + "L", arr);
+
+	    // Backtracking
 	    arr[sr][sc] = 1;
 	}
 }
