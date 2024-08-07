@@ -1,0 +1,31 @@
+public class Main
+{
+	public static void main(String[] args) {
+		int rows = 4;
+		int cols = 6;
+		int[][] arr = {{1,0,1,1,1,1},
+		               {1,1,1,1,0,1},
+		               {0,1,1,1,1,1},
+		               {0,0,1,0,1,1}};
+		maze(0,0,rows-1,cols-1, "", arr);
+	}
+	
+	static void maze(int sr, int sc, int rows, int cols, String ans, int[][] arr){
+	    if(sr<0 || sc<0 || sr>rows || sc > cols){
+	        return;
+	    }
+	    if(arr[sr][sc]==0){
+	        return;
+	    }
+	    if(sr == rows && sc == cols){
+	        System.out.println(ans);
+	        return;
+	    }
+	    arr[sr][sc] = 0;
+	    maze(sr, sc+1, rows, cols, ans + "R", arr);
+	    maze(sr+1, sc, rows, cols, ans + "D", arr);
+	    maze(sr-1, sc, rows, cols, ans + "U", arr);
+	    maze(sr, sc-1, rows, cols, ans + "L", arr);
+	    arr[sr][sc] = 1;
+	}
+}
