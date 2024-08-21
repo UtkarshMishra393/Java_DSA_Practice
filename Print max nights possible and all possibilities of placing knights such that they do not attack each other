@@ -1,1 +1,117 @@
+import java.util.*;
+
+public class Main
+{
+    static int number = 5;
+    static int maxknights = -1;
+    
+	public static void main(String[] args) {
+	    int n = 3;
+		char[][] grid = new char[n][n];
+		for(int i=0; i<n; i++){
+		    for(int j=0; j<n; j++){
+		        grid[i][j] = '_';
+		    }
+		}
+	    knight(grid, 0, 0, 0);
+	    System.out.println(maxknights);
+	}
+	
+	static void knight(char[][] grid, int row, int col, int num ){
+	    int n = grid.length;
+	    
+	    if(row == n){
+	       for(int i=0; i<n; i++){
+		      for(int j=0; j<n; j++){
+		          System.out.print(grid[i][j] + " ");
+		      }
+		      System.out.println();
+		   }
+		   System.out.println();
+	    
+	    maxknights = Math.max(maxknights, num);
+    	return;
+	    }
+	    
+	    if(isSafe(grid, row, col, 0)){
+	        grid[row][col] = 'K';
+	        if(col != n-1){
+    	        knight(grid, row, col+1, num+1);
+	        } else{
+	            knight(grid, row+1, 0, num+1);
+	        }
+	        grid[row][col] = '_';
+	    }
+	    if(col != n-1){
+    	   knight(grid, row, col+1, num);
+	    } else{
+	       knight(grid, row+1, 0, num);
+	    }
+	}
+	
+	static boolean isSafe(char[][] grid, int row, int col, int num){
+	    int n = grid.length;
+        //2 Up 1 right
+        int i = row-2;
+        int j = col+1;
+        if(i>=0 && j<n && grid[i][j]=='K'){
+            return false;
+        }
+
+        //2 Up 1 left
+        i = row-2;
+        j = col-1;
+        if(i>=0 && j>=0 && grid[i][j]=='K'){
+            return false;
+        }
+
+        //2 Down 1 right
+        i = row+2;
+        j = col+1;
+        if(i<n && j<n && grid[i][j]=='K'){
+            return false;
+        }
+
+
+        //2 Down 1 left
+        i = row+2;
+        j = col-1;
+        if(i<n && j>=0 && grid[i][j]=='K'){
+            return false;
+        }
+
+        //2 left 1 Up
+        i = row-1;
+        j = col-2;
+        if(i>=0 && j>=0 && grid[i][j]=='K'){
+            return false;
+        }
+
+        //2 left 1 Down
+        i = row+1;
+        j = col-2;
+        if(i<n && j>=0 && grid[i][j]=='K'){
+            return false;
+        }
+
+
+        //2 right 1 Up
+        i = row-1;
+        j = col+2;
+        if(i>=0 && j<n && grid[i][j]=='K'){
+            return false;
+        }
+
+        //2 right 1 Down
+        i = row+1;
+        j = col+2;
+        if(i<n && j<n && grid[i][j]=='K'){
+            return false;
+        }
+
+        return true;
+	}
+	
+	
+}
 
