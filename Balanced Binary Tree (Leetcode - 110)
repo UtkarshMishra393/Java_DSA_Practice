@@ -1,0 +1,18 @@
+class Solution {
+    boolean iB = true;
+    public boolean isBalanced(TreeNode root) {
+        depth(root);
+        return iB;
+    }
+    public int depth(TreeNode root){
+        int diff = 0;
+        if(root==null){
+            return 0;
+        }
+        int l = depth(root.left);
+        int r = depth(root.right);
+        diff = Math.abs(l-r);
+        if(diff >1) iB = false;
+        return 1+Math.max(l,r);
+    }
+}
