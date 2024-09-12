@@ -1,17 +1,14 @@
 class Solution {
     public TreeNode invertTree(TreeNode root) {
-        swap(root);
-        return root;
-    }
-    public void swap(TreeNode root){
         if(root==null || (root.left == null && root.right == null)){
-            return;
+            return root;
         }
         
         TreeNode temp = root.left;
         root.left = root.right;
         root.right = temp;
-        swap(root.left);
-        swap(root.right);
+        invertTree(root.left);
+        invertTree(root.right);
+        return root;
     }
 }
