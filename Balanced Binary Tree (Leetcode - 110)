@@ -1,18 +1,14 @@
 class Solution {
-    boolean iB = true;
-    public boolean isBalanced(TreeNode root) {
-        depth(root);
-        return iB;
-    }
-    public int depth(TreeNode root){
-        int diff = 0;
-        if(root==null){
-            return 0;
+    public TreeNode invertTree(TreeNode root) {
+        if(root==null || (root.left == null && root.right == null)){
+            return root;
         }
-        int l = depth(root.left);
-        int r = depth(root.right);
-        diff = Math.abs(l-r);
-        if(diff >1) iB = false;
-        return 1+Math.max(l,r);
+        
+        TreeNode temp = root.left;
+        root.left = root.right;
+        root.right = temp;
+        invertTree(root.left);
+        invertTree(root.right);
+        return root;
     }
 }
