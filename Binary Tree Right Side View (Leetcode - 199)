@@ -1,0 +1,65 @@
+First Method:-
+
+class Solution {
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        if(root == null){
+            return list;
+        }
+        List<Integer> ans = new ArrayList<>();
+        int level = height(root) + 1;
+        for(int i=1; i<=level; i++){
+            nthlevel(root, i, list);
+            ans.add(list.get(list.size()-1));
+            list.clear();
+        }
+
+        return ans;
+    }
+
+    public int height(TreeNode root){
+        if(root==null || (root.left==null && root.right==null)) return 0;
+        return Math.max(height(root.left), height(root.right)) + 1;
+    }
+
+    public void nthlevel(TreeNode root, int n, List<Integer> list){
+        if(root == null) return;
+        if(n==1){
+            list.add(root.val);
+            return;
+        }
+        nthlevel(root.left, n-1, list);
+        nthlevel(root.right, n-1, list);
+    }
+}
+
+
+
+Second Method (Better Approach):-
+
+class Solution {
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
+        if(root == null){
+            return ans;
+        }
+        int levels = height(root) + 1;
+        for(int i=0; i<levels; i++){
+            ans.add(0);
+        }
+        preOrder(root, ans, 1);
+        return ans;
+    }
+
+    public int height(TreeNode root){
+        if(root==null || (root.left==null && root.right==null)) return 0;
+        return Math.max(height(root.left), height(root.right)) + 1;
+    }
+
+    public void preOrder(TreeNode root, List<Integer> list, int level){
+        if(root==null) return;
+        list.set(level-1, root.val);
+        preOrder(root.left, list, level+1);
+        preOrder(root.right, list, level+1);
+    }
+}
