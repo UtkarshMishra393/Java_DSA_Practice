@@ -1,0 +1,22 @@
+class Solution {
+    public String operations(String word, int k){
+        if(word.length()>=k){
+            return word;
+        }
+        char[] arr1 = word.toCharArray();
+        char[] arr2 = new char[arr1.length];
+        
+        for(int i=0; i<arr1.length; i++){
+            if((arr1[i]+1)==123) arr2[i] = 'a';
+            else arr2[i] = (char)(arr1[i] + 1);
+        }
+        String newWord = new String(arr2);
+        System.out.println(newWord);
+        return operations(word+newWord, k);
+    }
+    
+    public char kthCharacter(int k) {
+        String word = operations("a", k);
+        return word.charAt(k-1);
+    }
+}
