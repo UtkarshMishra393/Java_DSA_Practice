@@ -1,0 +1,21 @@
+class Solution {
+    TreeNode pred = null;
+    boolean flag = true;
+    public boolean isValidBST(TreeNode root) {
+        helper(root);
+        return flag;
+    }
+    public void helper(TreeNode root){
+        if(root==null){
+            return;
+        }
+        helper(root.left);
+        if(pred==null) pred = root;
+        else if (pred.val>=root.val){
+            flag = false;
+            return;
+        }
+        else pred = root;
+        helper(root.right);
+    }
+}
