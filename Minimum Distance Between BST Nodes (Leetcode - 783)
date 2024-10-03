@@ -6,7 +6,7 @@ class Solution {
         minDiffInBST(root.right);
         if(pred==null) pred = root;
         else {
-            if((pred.val-root.val)<min) min = pred.val-root.val;
+            min = Math.min(min, pred.val-root.val);
             pred = root;
         }
         minDiffInBST(root.left);
