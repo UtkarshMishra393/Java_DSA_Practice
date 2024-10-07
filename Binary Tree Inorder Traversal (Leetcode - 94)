@@ -44,3 +44,37 @@ class Solution {
         helper(root.right, list);
     }
 }
+
+
+
+3. Morris Traversal
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        ArrayList<Integer> arr = new ArrayList<>();
+        if(root==null){
+            return arr;
+        }
+        TreeNode curr = root;
+        TreeNode pred = null;
+        while(curr!=null){
+            if(curr.left!=null){
+                pred = curr.left;
+                while(pred.right!=null && pred.right!=curr) pred = pred.right;
+                if(pred.right==curr){
+                    arr.add(curr.val);
+                    pred.right = null;
+                    curr = curr.right;
+                }
+                else{
+                    pred.right = curr;
+                    curr = curr.left;
+                }
+            }
+            else{
+                arr.add(curr.val);
+                curr = curr.right;
+            }
+        }
+        return arr;      
+    }
+}
