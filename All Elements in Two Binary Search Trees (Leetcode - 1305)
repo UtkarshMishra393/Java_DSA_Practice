@@ -1,0 +1,80 @@
+1. Recursive Method
+
+class Solution {
+    public void inorder(TreeNode root, List<Integer> arr){
+        if(root==null) return ;
+
+        inorder(root.left, arr);
+        arr.add(root.val);
+        inorder(root.right, arr);
+    }
+    public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
+        List<Integer> arr = new ArrayList<>();
+        inorder(root1, arr);
+        inorder(root2, arr);
+        Collections.sort(arr);
+        return arr;
+    }
+}
+
+
+2. Morris Traversal
+
+class Solution {
+    public void morris_traversal(TreeNode root, List<Integer> arr){
+        TreeNode curr = root;
+        TreeNode pred = null;
+        while(curr!=null){
+            if(curr.left!=null){
+                pred = curr.left;
+                while(pred.right!=null && pred.right!=curr) pred = pred.right;
+                if(pred.right==curr){
+                    arr.add(curr.val);
+                    pred.right = null;
+                    curr = curr.right;
+                }
+                else{
+                    pred.right = curr;
+                    curr = curr.left;
+                }
+            }
+            else{
+                arr.add(curr.val);
+                curr = curr.right;
+            }
+        }
+    }
+    public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
+        List<Integer> arr1 = new ArrayList<>();
+        if(root1==null && root2==null){
+            return arr1;
+        }
+        List<Integer> arr2 = new ArrayList<>();
+        List<Integer> ans = new ArrayList<>();
+        morris_traversal(root1, arr1);
+        morris_traversal(root2, arr2);
+        int i = 0;
+        int j = 0;
+        while(i<arr1.size() && j<arr2.size()){
+            if(arr1.get(i)<arr2.get(j)){
+                ans.add(arr1.get(i));
+                i++;
+            }
+            else{
+                ans.add(arr2.get(j));
+                j++;
+            }
+        }
+
+        while(i<arr1.size()){
+            ans.add(arr1.get(i));
+            i++;
+        }
+
+        while(j<arr2.size()){
+            ans.add(arr2.get(j));
+            j++;
+        }
+        return ans;
+    }
+}
