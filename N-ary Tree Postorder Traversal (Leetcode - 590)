@@ -1,0 +1,16 @@
+class Solution {
+    public List<Integer> postorder(Node root) {
+        List<Integer> list = new LinkedList<>();
+        helper(root, list);
+        return list;
+    }
+    static void helper(Node root, List<Integer> list){
+        if(root==null){
+            return;
+        }
+        for(int i=0; i<root.children.size(); i++){
+            helper(root.children.get(i), list);
+        }
+        list.add(root.val);
+    }
+}
