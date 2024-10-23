@@ -1,0 +1,31 @@
+class Solution {
+    public List<List<Integer>> levelOrder(Node root) {
+        List<List<Integer>> ans = new ArrayList<>();
+        if(root==null) return ans;
+        List<Integer> list = new ArrayList<>();
+        Queue<Node> q = new LinkedList<>();
+        q.add(root);
+        
+        while(!q.isEmpty()){
+            int qlen = q.size();
+            for(int i=0; i<qlen; i++){
+                root = q.remove();
+                list.add(root.val);
+                if(!root.children.isEmpty()){
+                    int n = root.children.size(); 
+                    for(int j=0; j<n; j++){
+                        q.add(root.children.get(j));
+                    }
+                }
+            }
+            List<Integer> temp = new ArrayList<>();
+            for(int i: list){
+                temp.add(i);
+            }
+            ans.add(temp);
+            list.clear();
+        }
+
+        return ans;
+    }
+}
