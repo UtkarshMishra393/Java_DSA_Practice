@@ -1,0 +1,56 @@
+import java.util.*;
+
+public class Main{
+    static void swap(List<Integer> arr, int a, int b){
+        int temp = arr.get(a);
+        arr.set(a, arr.get(b));
+        arr.set(b, temp);
+    }
+    
+    static void push_down(List<Integer> arr, int i, int n){
+        if(i==n){
+            return;
+        }
+        
+        int left = (2*i)+1;
+        int right = (2*i)+2;
+        
+        int biggest = i;
+        
+        if(left<=n && arr.get(left)>arr.get(biggest)){
+            biggest = left;
+        }
+        if(right<=n && arr.get(right)>arr.get(biggest)){
+            biggest = right;
+        }
+        
+        if(biggest==i) return;
+        
+        swap(arr, i, biggest);
+        push_down(arr, biggest, n);
+    }
+    
+	public static void main(String[] args) {
+	    Scanner sc= new Scanner(System.in);
+		LinkedList<Integer> arr = new LinkedList<>();
+		arr.add(60);
+		arr.add(10);
+		arr.add(80);
+		arr.add(50);
+		arr.add(5);
+		arr.add(20);
+		arr.add(70);
+		
+		// Heapify:- To convert a normal array in a heap (here we are converting to doing max heap)
+		// for heapify start from first non leaf node and apply "push down" from that node to the first node.
+		// first non leaf node = parent of last node.
+		
+		System.out.println(arr);
+		int first_non_leaf_node = ((arr.size()-1)-1)/2;
+        int n = arr.size();
+		for(int i = first_non_leaf_node; i>=0; i--){
+		    push_down(arr, i, n-1);
+		}
+		System.out.println(arr);
+	}
+}
