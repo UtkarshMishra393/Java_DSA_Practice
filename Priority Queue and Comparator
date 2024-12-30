@@ -1,0 +1,42 @@
+import java.util.*;
+
+public class Main
+{
+    private static class Student{
+        String name;
+        int rollno;
+        int marks;
+    }
+    private static class StudentComparator implements Comparator<Student>{
+        //overriding of internal compare function
+        public int compare(Student s1, Student s2){
+            if(s1.marks>s2.marks) return 1;
+            else if(s1.marks<s2.marks) return -1;
+            else{
+               if(s1.rollno>s2.rollno) return 1;
+               else return -1; 
+            }
+        }
+    }
+	public static void main(String[] args) {
+		PriorityQueue<Student> pq = new PriorityQueue<>(new StudentComparator());
+		
+		Student harsh = new Student();
+		harsh.name = "Harsh";
+		harsh.rollno = 21;
+		harsh.marks = 79;
+		
+		Student rohan = new Student();
+		rohan.name = "Rohan";
+		rohan.rollno = 27;
+		rohan.marks = 83;
+		
+		pq.add(harsh);
+		pq.add(rohan);
+		
+		System.out.println(pq.peek().name);
+		System.out.println(pq.peek().rollno);
+		System.out.println(pq.peek().marks);
+		
+	}
+}
