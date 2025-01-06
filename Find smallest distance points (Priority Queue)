@@ -1,0 +1,81 @@
+import java.util.*;
+
+public class Main
+{
+    private static class Point{
+        int x;
+        int y;
+        double distance;
+    }
+    
+    private static class PointComparator implements Comparator<Point>{
+        public int compare(Point p1, Point p2){
+            if(p1.distance<p2.distance) return 1;
+            else if(p1.distance>p2.distance) return -1;
+            else return 0;
+        }
+    }
+    
+    static double dist(int x, int y){
+        return Math.pow((x*x + y*y), 0.5);
+    }
+    
+	public static void main(String[] args) {
+	    Scanner sc = new Scanner(System.in);
+	    
+	    List<Point> arr = new ArrayList<>();
+	    
+	    Point p1 = new Point();
+	    p1.x = 5;
+	    p1.y = 6;
+	    p1.distance = dist(p1.x, p1.y);
+	    
+	    Point p2 = new Point();
+	    p2.x = 1;
+	    p2.y = 2;
+	    p2.distance = dist(p2.x, p2.y);
+	    
+	    Point p3 = new Point();
+	    p3.x = 3;
+	    p3.y = 4;
+	    p3.distance = dist(p3.x, p3.y);
+	    
+	    Point p4 = new Point();
+	    p4.x = 5;
+	    p4.y = 3;
+	    p4.distance = dist(p4.x, p4.y);
+	    
+	    Point p5 = new Point();
+	    p5.x = 7;
+	    p5.y = 8;
+	    p5.distance = dist(p5.x, p5.y);
+	    
+	    Point p6 = new Point();
+	    p6.x = 9;
+	    p6.y = 10;
+	    p6.distance = dist(p6.x, p6.y);
+	    
+	    arr.add(p1);
+	    arr.add(p2);
+	    arr.add(p3);
+	    arr.add(p4);
+	    arr.add(p5);
+	    
+	    int k = sc.nextInt();
+	    
+	    PriorityQueue<Point> pq = new PriorityQueue<>(new PointComparator());
+	    
+	    for(int i=0; i<arr.size(); i++){
+	        if(i<k) pq.add(arr.get(i));
+	        if(i>=k && pq.peek().distance>arr.get(i).distance){
+	            pq.remove();
+	            pq.add(arr.get(i));
+	        }
+	    }
+	    
+	    for(int i=0; i<k; i++){
+	        System.out.println(pq.peek().x + " " + pq.peek().y);
+	        pq.remove();
+	    }
+	}
+}
