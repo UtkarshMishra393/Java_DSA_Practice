@@ -1,0 +1,60 @@
+import java.util.Scanner;
+
+public class Main {
+
+	int N; // 풍경화의 크기
+	int a[][] = new int [10 + 10][10 + 10]; // 풍경화
+	int X1, X2, X3; // 숨은 그림을 의미하는 2개의 숫자
+
+	int di[] = {-1,-1,-1,0,1,1,1,0};
+	int dj[] = {-1,0,1,1,1,0,-1,-1};
+	int Solve() {
+		int count = 0;
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				if (a[i][j] != X1) continue;
+				for (int k = 0; k < 8; k++) {
+					int ni = i + di[k];
+					int nj = j + dj[k];
+					if (ni < 0 || ni >= N) continue;
+					if (nj < 0 || nj >= N) continue;
+					if (a[ni][nj] != X2) continue;
+					int ni2 = i + 2*di[k];
+					int nj2 = j + 2*dj[k];
+					if (ni2 < 0 || ni2 >= N) continue;
+					if (nj2 < 0 || nj2 >= N) continue;
+					if (a[ni2][nj2] != X3) continue;
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+
+	void InputData(){
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt();
+		for (int i = 0; i < N; i++) {
+			for(int j = 0; j < N; j++) {
+				a[i][j] = sc.nextInt();
+			}
+		}
+		X1 = sc.nextInt();
+		X2 = sc.nextInt();
+		X3 = sc.nextInt();
+
+		sc.close();
+	}
+	
+	public static void main(String[] args){
+		int ans = -1;
+		Main m = new Main();
+
+		m.InputData(); // 입력
+
+		// 코드 작성
+		ans = m.Solve();
+
+		System.out.print(ans); // 출력
+	}
+}
