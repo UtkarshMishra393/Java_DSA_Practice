@@ -1,0 +1,55 @@
+import java.util.Scanner;
+
+public class Main {
+	static int N;
+	static int Box[][];
+	void InputData(){
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt(); // 상자의 크기
+		Box = new int [N][N]; 
+		for (int i=0; i<N; i++){
+			for (int j=0; j<N; j++){
+				Box[i][j] = sc.nextInt();
+			}
+		}
+		sc.close();
+	}
+
+	public static void main(String[] args){
+		int ans = 0;
+		Main m = new Main();
+
+		m.InputData();				//	입력 함수
+
+		int max_row = 0;
+		int max_col = 0;
+		
+		int[] row = new int[N];
+		int[] col = new int[N];
+		
+		for(int i=0; i<N; i++){
+			for(int j=0; j<N; j++){
+				row[i] += Box[i][j];
+				col[i] += Box[j][i];
+			}
+			if(row[i] > max_row) max_row = row[i];
+			if(col[i] > max_col) max_col = col[i];
+		}
+		
+		if(max_row>max_col){
+			for(int i=0; i<N; i++){
+				if(row[i]!=max_row){
+					ans += max_row - row[i];
+				}
+			}
+		}
+		else{
+			for(int i=0; i<N; i++){
+				if(col[i]!=max_col){
+					ans += max_col - col[i];
+				}
+			}
+		}
+		System.out.println(ans);//출력
+	}
+}
