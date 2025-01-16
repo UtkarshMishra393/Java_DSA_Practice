@@ -1,0 +1,53 @@
+import java.util.Scanner;
+
+public class Main {
+	char stime[] = new char[10];
+	char etime[] = new char[10];
+
+	void InputData() {
+		Scanner sc = new Scanner(System.in);
+		stime = sc.next().toCharArray();
+		etime = sc.next().toCharArray();
+		sc.close();
+	}
+
+	int ConvertInt(char a, char b) {
+		return (a - '0') * 10 + (b - '0');
+	}
+
+	int ComputeTime() {
+		int s = ConvertInt(stime[0], stime[1]) * 60 + ConvertInt(stime[3], stime[4]);
+		int e = ConvertInt(etime[0], etime[1]) * 60 + ConvertInt(etime[3], etime[4]);
+
+    //.....
+		if(s>e) e =  e + 24*60;
+    //.....
+		return (e - s);
+	}
+
+	int Solve() {
+		int p;
+		int t = ComputeTime();
+
+		if (t < 30) return 500;
+
+    //.....
+		p = (t-30)%10 != 0 ? 500 + ((int)((t - 30) / 10) + 1) * 300 : 500 + ((t - 30) / 10)*300;
+		if(p>30000) p = 30000;
+    //.....
+		return p;
+	}
+
+	void OutputData(int sol) {
+		System.out.println(sol);
+	}
+
+	public static void main(String[] args) {
+		int sol = -1;
+		Main m = new Main();
+
+		m.InputData(); // 입력
+		sol = m.Solve(); // 문제 해결
+		m.OutputData(sol); // 출력
+	}
+}
