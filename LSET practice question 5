@@ -1,0 +1,108 @@
+import java.io.*;
+import java.util.*;
+public class Main {
+	int N;
+	char map[][];
+
+	char ans; //구매자 이름 Buyer's name
+	int areacnt; //구매자 영역 개수 Number of buyer's area
+
+	void InputData() throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(bf.readLine());
+		map = new char[N][N];
+		for (int i = 0; i < N; i++) {
+			map[i] = bf.readLine().toCharArray();
+		}
+		bf.close();
+	}
+	
+int Rz = 0;
+int Gz = 0;
+int Bz = 0;
+int Rgrid = 0;
+int Ggrid = 0;
+int Bgrid = 0;
+	
+int[][] isVisited = new int[N][N];
+	
+	
+	public class Pair{
+		int r;
+		int c;
+	}
+	
+	void Solve_BFS(){
+		
+		Queue<Pair> q = new Queue<>();
+		
+		for(int i=0; i<N; i++){
+			for(int j=0; j<N; j++){
+				if(isVisited[i][j] != 1){
+					isVisited[i][j] = 1;
+					Pair pair = new Pair();
+					pair.r = i;
+					pair.c = j;
+					q.add(p);
+					break;
+				}
+			}
+		}
+		
+		int[] row = {-1, 0, 1, 0};
+		int[] col = {0, 1, 0, -1};
+		
+		int a = q.peek().r;
+		int b = q.peek().c;
+		
+		char x = map[a][b];
+		int grids = 0;
+		
+		while(!q.isEmpty()){
+			for(int i=0; i<4; i++){
+				
+				if(a+row[i] < 0 || a+row[i] > N || b+col[i] < 0 || b+col[i] > N){
+					continue;
+				}
+				if((isVisited[a + row[i]][b + col[i]] == 0) && (map[a + row[i]][b + col[i]] == map[a][b])){
+					isVisited[a + row[i]][b + col[i]] = 1;
+					grids++:
+					Pair p = new Pair();
+					p.r = a + row[i];
+					p.c = b + col[i];
+					q.add(p);
+				}
+			}
+			q.remove();
+		}
+		
+		if(x == 'R'){
+			Rgrid += grids;
+			Rz++;
+		}
+		else if(x== 'G'){
+			Ggrid += grids;
+			Gz++;
+		}
+		else{
+			Bgrid += grids;
+			Bz++;
+		}
+	}
+
+	public static void main(String[] args) throws IOException {
+		Main m = new Main();
+		m.InputData(); //입력 Input
+		
+		//여기서부터 작성 Write from here
+		while((Rgrid + Ggrid + Bgrid) != N*N){
+			m.Solve_BFS();
+		}
+
+		//출력 Output
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		bw.write(String.valueOf(m.ans) + " " + String.valueOf(m.areacnt) + "\n");
+		bw.flush();
+		bw.close();
+	}
+}
