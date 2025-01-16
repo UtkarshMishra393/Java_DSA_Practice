@@ -24,55 +24,45 @@ static int Rgrid = 0;
 static int Ggrid = 0;
 static int Bgrid = 0;
 	
-static int[][] isVisited = new int[N][N];
-	
 	public class Pair{
 		int r;
 		int c;
 	}
 	
-	void Solve_BFS(){
+	void Solve_BFS(int[][] isVisited, int r, int c){
 		
 		Queue<Pair> q = new LinkedList<>();
 		
-		for(int i=0; i<N; i++){
-			for(int j=0; j<N; j++){
-				if(isVisited[i][j] != 1){
-					isVisited[i][j] = 1;
-					Pair p = new Pair();
-					p.r = i;
-					p.c = j;
-					q.add(p);
-					break;
-				}
-			}
-		}
+		Pair p = new Pair();
+		p.r = r;
+		p.c = c;
+		q.add(p);
+		
+		isVisited[r][c] = 1;
 		
 		int[] row = {-1, 0, 1, 0};
 		int[] col = {0, 1, 0, -1};
 		
-		int a = q.peek().r;
-		int b = q.peek().c;
-		
-		char x = map[a][b];
+		char x = map[r][c];
 		int grids = 0;
 		
 		while(!q.isEmpty()){
+			int a = q.peek().r;
+			int b = q.peek().c;
+			
+			q.remove();
+			
 			for(int i=0; i<4; i++){
-				
-				if(a+row[i] < 0 || a+row[i] > N || b+col[i] < 0 || b+col[i] > N){
+				if(a+row[i] < 0 || a+row[i] >= N || b+col[i] < 0 || b+col[i] >= N || (isVisited[a + row[i]][b + col[i]] == 1) || (map[a + row[i]][b + col[i]] != map[a][b])){
 					continue;
 				}
-				if((isVisited[a + row[i]][b + col[i]] == 0) && (map[a + row[i]][b + col[i]] == map[a][b])){
-					isVisited[a + row[i]][b + col[i]] = 1;
-					grids++;
-					Pair p = new Pair();
-					p.r = a + row[i];
-					p.c = b + col[i];
-					q.add(p);
-				}
+				
+				isVisited[a + row[i]][b + col[i]] = 1;
+				grids++;
+				p.r = a + row[i];
+				p.c = b + col[i];
+				q.add(p);
 			}
-			q.remove();
 		}
 		
 		if(x == 'R'){
@@ -93,23 +83,36 @@ static int[][] isVisited = new int[N][N];
 		Main m = new Main();
 		m.InputData(); //입력 Input
 		
-		//여기서부터 작성 Write from here
-		while((Rgrid + Ggrid + Bgrid) != N*N){
-			m.Solve_BFS();
+		int[][] isVisited = new int[N][N];
+		
+		for(int i=0; i<N; i++){
+			for(int j=0; j<N; j++){
+				if(isVisited[i][j] != 1){
+					m.Solve_BFS(isVisited, i, j);
+				}
+			}
 		}
 		
-		if((Rz > Gz && Rz > Bz) || (Rz == Bz || Rz==Gz)){
-			ans = 'R';
-			areacnt = Rgrid;
-		} else if((Gz > Rz && Gz > Bz) || (Gz == Bz)){
-			ans = 'G';
-			areacnt = Ggrid;
-		} else{
-			ans = 'B';
-			areacnt = Bgrid;
-		}
-		
+		int maxZones = Math.max(Rz, Math.max(Gz, Bz));
 
+        // Check owners with the max zones
+        if (Rz == maxZones) {
+            ans = 'R';
+            areacnt = Rz;
+        }
+        if (Gz == maxZones) {
+            if (ans == ' ' || Ggrid > Rgrid || (Ggrid == Rgrid && ans != 'R')) {
+                ans = 'G';
+                areacnt = Gz;
+            }
+        }
+        if (Bz == maxZones) {
+            if (ans == ' ' || Bgrid > Rgrid || (Bgrid == Rgrid && ans == 'G')) {
+                ans = 'B';
+                areacnt = Bz;
+            }
+        }
+		
 		//출력 Output
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		bw.write(String.valueOf(m.ans) + " " + String.valueOf(m.areacnt) + "\n");
