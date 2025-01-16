@@ -1,11 +1,11 @@
 import java.io.*;
 import java.util.*;
 public class Main {
-	int N;
+	static int N;
 	char map[][];
 
-	char ans; //구매자 이름 Buyer's name
-	int areacnt; //구매자 영역 개수 Number of buyer's area
+	static char ans; //구매자 이름 Buyer's name
+	static int areacnt; //구매자 영역 개수 Number of buyer's area
 
 	void InputData() throws IOException {
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
@@ -17,15 +17,14 @@ public class Main {
 		bf.close();
 	}
 	
-int Rz = 0;
-int Gz = 0;
-int Bz = 0;
-int Rgrid = 0;
-int Ggrid = 0;
-int Bgrid = 0;
+static int Rz = 0;
+static int Gz = 0;
+static int Bz = 0;
+static int Rgrid = 0;
+static int Ggrid = 0;
+static int Bgrid = 0;
 	
-int[][] isVisited = new int[N][N];
-	
+static int[][] isVisited = new int[N][N];
 	
 	public class Pair{
 		int r;
@@ -34,15 +33,15 @@ int[][] isVisited = new int[N][N];
 	
 	void Solve_BFS(){
 		
-		Queue<Pair> q = new Queue<>();
+		Queue<Pair> q = new LinkedList<>();
 		
 		for(int i=0; i<N; i++){
 			for(int j=0; j<N; j++){
 				if(isVisited[i][j] != 1){
 					isVisited[i][j] = 1;
-					Pair pair = new Pair();
-					pair.r = i;
-					pair.c = j;
+					Pair p = new Pair();
+					p.r = i;
+					p.c = j;
 					q.add(p);
 					break;
 				}
@@ -66,7 +65,7 @@ int[][] isVisited = new int[N][N];
 				}
 				if((isVisited[a + row[i]][b + col[i]] == 0) && (map[a + row[i]][b + col[i]] == map[a][b])){
 					isVisited[a + row[i]][b + col[i]] = 1;
-					grids++:
+					grids++;
 					Pair p = new Pair();
 					p.r = a + row[i];
 					p.c = b + col[i];
@@ -98,6 +97,18 @@ int[][] isVisited = new int[N][N];
 		while((Rgrid + Ggrid + Bgrid) != N*N){
 			m.Solve_BFS();
 		}
+		
+		if((Rz > Gz && Rz > Bz) || (Rz == Bz || Rz==Gz)){
+			ans = 'R';
+			areacnt = Rgrid;
+		} else if((Gz > Rz && Gz > Bz) || (Gz == Bz)){
+			ans = 'G';
+			areacnt = Ggrid;
+		} else{
+			ans = 'B';
+			areacnt = Bgrid;
+		}
+		
 
 		//출력 Output
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
