@@ -63,28 +63,22 @@ public class Main {
 				}
 				
 			}
-						
-			System.out.println(map);
-			
+									
 			int mapMax = 0;
 			int maxKey = 0;
 			for(int i: map.keySet()){
-				if(map.get(i) > mapMax){
-					mapMax = map.get(i);
+				int sum = map.get(i);
+				if(map.containsKey(i-1)){
+					sum = sum + map.get(i-1);
+				}
+				if(map.containsKey(i+1)){
+					sum = sum + map.get(i+1);
+				}
+				if(sum>mapMax){
+					mapMax = sum;
 					maxKey = i;
 				}
 			}
-			
-			System.out.println(maxKey);
-			
-			if(map.containsKey(maxKey-1)){
-				mapMax = mapMax + map.get(maxKey-1);
-			}
-			if(map.containsKey(maxKey+1)){
-				mapMax = mapMax + map.get(maxKey+1);
-			}
-			
-			System.out.println(mapMax);
 			
 			if(mapMax>max){
 				max = mapMax;
