@@ -56,9 +56,9 @@ public class Main {
 					map.put(ID[b], 1);
 				}
 				
-				if(map.containsKey(ID[a-1]) && map.get(ID[a-1])==1){
-					map.remove(a-1);
-				}else if(map.containsKey(ID[a-1]) && map.get(ID[a-1])!=1){
+				if(map.get(ID[a-1])==1){
+					map.remove(ID[a-1]);
+				}else if(map.get(ID[a-1])!=1){
 					map.put(ID[a-1], map.get(ID[a-1])-1);
 				}
 				
