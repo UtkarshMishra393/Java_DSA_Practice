@@ -1,0 +1,100 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+	static int N, M;
+	static int ID[];
+
+	void InputData() throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+		String in[] = bf.readLine().split(" "); 
+		N = Integer.parseInt(in[0]);
+		M = Integer.parseInt(in[1]);
+		ID = new int[N];
+		in = bf.readLine().split(" "); 
+		for (int i = 0; i < N; i++){
+			ID[i] = Integer.parseInt(in[i]);
+		}
+		bf.close();
+	}
+	
+	void OutputData(int ans) throws IOException {
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		bw.write(String.valueOf(ans) + "\n");
+		bw.flush();
+		bw.close();
+	}
+
+	public static void main(String[] args) throws IOException {
+		Main m = new Main();
+
+		int ans = 0;
+		m.InputData();//입력 함수
+
+		//코드를 작성하세요
+		
+		Map<Integer, Integer> map = new HashMap<>();
+		for(int i=0; i<M; i++){
+			if(map.containsKey(ID[i])){
+				map.put(ID[i], map.get(ID[i])+1);
+			}else{
+				map.put(ID[i], 1);
+			}
+		}
+		
+		int a=0;
+		int b=M-1;
+		
+		int max = 0;
+		
+		while(b<=N-1){
+			
+			if(a!=0){
+				if(map.containsKey(ID[b])){
+					map.put(ID[b], map.get(ID[b])+1);
+				}else{
+					map.put(ID[b], 1);
+				}
+				
+				if(map.containsKey(ID[a-1]) && map.get(ID[a-1])==1){
+					map.remove(a-1);
+				}else if(map.containsKey(ID[a-1]) && map.get(ID[a-1])!=1){
+					map.put(ID[a-1], map.get(ID[a-1])-1);
+				}
+				
+			}
+						
+			System.out.println(map);
+			
+			int mapMax = 0;
+			int maxKey = 0;
+			for(int i: map.keySet()){
+				if(map.get(i) > mapMax){
+					mapMax = map.get(i);
+					maxKey = i;
+				}
+			}
+			
+			System.out.println(maxKey);
+			
+			if(map.containsKey(maxKey-1)){
+				mapMax = mapMax + map.get(maxKey-1);
+			}
+			if(map.containsKey(maxKey+1)){
+				mapMax = mapMax + map.get(maxKey+1);
+			}
+			
+			System.out.println(mapMax);
+			
+			if(mapMax>max){
+				max = mapMax;
+			}
+			a++;
+			b++;
+		}
+		
+		ans = max;
+
+		m.OutputData(ans);//출력 함수
+	}
+}
