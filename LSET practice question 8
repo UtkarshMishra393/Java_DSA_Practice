@@ -1,0 +1,47 @@
+import java.util.*;
+public class Main {
+	static int N; //선수의 인원수 number of playersnumber of players
+	static long T; //시간 time
+	static long P[] = new long[100000 + 10]; //선수 초기 위치 player initial position
+	static long S[] = new long[100000 + 10]; //선수 속도 player speed
+	static int group_first[] = new int[100000 + 10]; //각 그룹의 선두선수 leader of each group
+
+	public void InputData() {
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt();
+		T = sc.nextLong();
+
+		for (int i = 0; i < N; i++) {
+			P[i] = sc.nextLong();
+			S[i] = sc.nextLong();
+		}
+		sc.close();
+	}
+
+	public static void main(String[] args) {
+		int ans = 0;
+		Main m = new Main();
+		m.InputData(); //입력 Input
+
+		//코드를 작성하세요 Write the code
+		for(int i=0; i<N; i++){
+			P[i] = P[i] + T*S[i];
+		}
+		
+		int prev = N-1;
+		for(int i=N-2; i>=0; i--){
+			if(P[i]>=P[prev]){
+				continue;
+			}
+			else{
+				group_first[ans++] = prev+1;
+				prev = i;
+			}
+		}
+		group_first[ans++] = prev+1;
+
+		
+		System.out.println(ans);
+		for (int i = 0; i < ans; i++) System.out.print(group_first[i] + " ");
+	}
+}
