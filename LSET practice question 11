@@ -1,5 +1,5 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
 	static int S, E1, E2;
@@ -22,55 +22,58 @@ public class Main {
 		bw.close();
 	}
 	
-		static int getFactors(int num) {
-		int cnt = 0;
-		for (int i = 1; i <= Math.sqrt(num); i++) {
-			if (num % i == 0) {
-				if (i == num / i) {
-					cnt++;
-				} else {
-					cnt += 2;
+	
+	static int getFactors(int n){
+		int c = 0;
+		for(int i=1; i<=Math.sqrt(n); i++){
+			if(n%i == 0){
+				if(i == n/i){
+					c++;
+				}
+				else{
+					c += 2;
 				}
 			}
 		}
-		return cnt;
+		return c;
 	}
-
-	static boolean canMove(int p1, int p2) {
-		int p1F = getFactors(p1);
-		int p2F = getFactors(p2);
-		if (Math.abs(p1F - p2F) > 1) return false;
-		String p1S = String.valueOf(p1);
-		String p2S = String.valueOf(p2);
-		int cnt = 0;
-		for (int i = 0; i < 4; i++) {
-			if (p1S.charAt(i) != p2S.charAt(i)) cnt++;
-			if (cnt > 1) return false;
+	
+	static boolean canMove(int P1, int P2){
+		int P1f = getFactors(P1);
+		int P2f = getFactors(P2);
+		if(Math.abs(P1f - P2f) > 1) return false;
+		String P1s = String.valueOf(P1);
+		String P2s = String.valueOf(P2);
+		int c = 0;
+		for(int i=0; i<4; i++){
+			if(P1s.charAt(i) != P2s.charAt(i)) c++;
+			if(c>1) return false;
 		}
+		
 		return true;
 	}
-
-	static int bfs(int start, int end) {
+	
+	static int bfs(int start, int end){
 		Queue<int[]> q = new LinkedList<>();
 		Set<Integer> vis = new HashSet<>();
 		q.add(new int[]{start, 0});
 		vis.add(start);
-		while (!q.isEmpty()) {
+		
+		while(!q.isEmpty()){
 			int[] curr = q.poll();
 			int currNum = curr[0];
 			int moves = curr[1];
-			if (currNum == end) return moves;
-			for (int i = 0; i < 4; i++) {
+			if(currNum == end) return moves;
+			for(int i=0; i<4; i++){
 				char[] currStr = String.valueOf(currNum).toCharArray();
-				for (char d = '0'; d <= '9'; d++) {
-					if (currStr[i] == d) continue;
+				for(char d = '0'; d<='9'; d++){
 					char[] nextStr = currStr.clone();
+					if(currStr[i]==d) continue;
 					nextStr[i] = d;
 					int nextNum = Integer.parseInt(new String(nextStr));
-					if (nextNum >= 1000 && nextNum <= 9999 && 
-						!vis.contains(nextNum) && canMove(currNum, nextNum)) {
-						q.add(new int[]{nextNum, moves + 1});
+					if(nextNum >= 1000 && nextNum <= 9999 && !vis.contains(nextNum) && canMove(currNum, nextNum)){
 						vis.add(nextNum);
+						q.add(new int[]{nextNum, moves+1});
 					}
 				}
 			}
