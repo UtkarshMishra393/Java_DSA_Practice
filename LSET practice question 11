@@ -1,0 +1,92 @@
+import java.util.*;
+import java.io.*;
+
+public class Main {
+	static int S, E1, E2;
+	static int ans1, ans2;
+
+	void InputData() throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+		String in[] = bf.readLine().split(" "); 
+		S = Integer.parseInt(in[0]);
+		E1 = Integer.parseInt(in[1]);
+		E2 = Integer.parseInt(in[2]);
+		bf.close();
+	}
+	
+	void OutputData() throws IOException {
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		bw.write(String.valueOf(ans1) + "\n");
+		bw.write(String.valueOf(ans2) + "\n");
+		bw.flush();
+		bw.close();
+	}
+	
+		static int getFactors(int num) {
+		int cnt = 0;
+		for (int i = 1; i <= Math.sqrt(num); i++) {
+			if (num % i == 0) {
+				if (i == num / i) {
+					cnt++;
+				} else {
+					cnt += 2;
+				}
+			}
+		}
+		return cnt;
+	}
+
+	static boolean canMove(int p1, int p2) {
+		int p1F = getFactors(p1);
+		int p2F = getFactors(p2);
+		if (Math.abs(p1F - p2F) > 1) return false;
+		String p1S = String.valueOf(p1);
+		String p2S = String.valueOf(p2);
+		int cnt = 0;
+		for (int i = 0; i < 4; i++) {
+			if (p1S.charAt(i) != p2S.charAt(i)) cnt++;
+			if (cnt > 1) return false;
+		}
+		return true;
+	}
+
+	static int bfs(int start, int end) {
+		Queue<int[]> q = new LinkedList<>();
+		Set<Integer> vis = new HashSet<>();
+		q.add(new int[]{start, 0});
+		vis.add(start);
+		while (!q.isEmpty()) {
+			int[] curr = q.poll();
+			int currNum = curr[0];
+			int moves = curr[1];
+			if (currNum == end) return moves;
+			for (int i = 0; i < 4; i++) {
+				char[] currStr = String.valueOf(currNum).toCharArray();
+				for (char d = '0'; d <= '9'; d++) {
+					if (currStr[i] == d) continue;
+					char[] nextStr = currStr.clone();
+					nextStr[i] = d;
+					int nextNum = Integer.parseInt(new String(nextStr));
+					if (nextNum >= 1000 && nextNum <= 9999 && 
+						!vis.contains(nextNum) && canMove(currNum, nextNum)) {
+						q.add(new int[]{nextNum, moves + 1});
+						vis.add(nextNum);
+					}
+				}
+			}
+		}
+		return -1;
+	}
+
+	public static void main(String[] args) throws IOException {
+		Main m = new Main();
+
+		m.InputData();//입력 함수
+
+		//코드를 작성하세요
+		ans1 = bfs(S, E1);
+		ans2 = bfs(S, E2);
+
+		m.OutputData();//출력 함수
+	}
+}
