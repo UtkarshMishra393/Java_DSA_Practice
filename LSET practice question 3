@@ -1,0 +1,113 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main{
+	InputStreamReader reader;
+	BufferedReader br;
+
+	static int R, C;
+	static char[][] map;
+
+	void inputData() throws Exception{
+		reader = new InputStreamReader(System.in);
+		br = new BufferedReader(reader);
+		StringTokenizer st;
+
+		st = new StringTokenizer(br.readLine());
+		R = Integer.parseInt(st.nextToken());
+		C = Integer.parseInt(st.nextToken());
+
+		map = new char[R][];
+		for(int r = 0; r < R; r++) {
+			map[r] = br.readLine().toCharArray();
+		}
+	}
+	
+	static int maxPoint = 0;
+	static int[][] grid = new int[11][11];
+	static int[] row = {-1, 1, 0, 0};
+	static int[] col = {0, 0, 1, -1};
+	static int minDistance = Integer.MAX_VALUE;
+	
+	static void bfs(int start, int i, int j){
+		Queue<int[]> q = new LinkedList<>();
+		q.add(new int[]{i, j, 0});
+		
+		boolean[][] vis = new boolean[R][C];
+		vis[i][j] = true;
+		
+		while(!q.isEmpty()){
+			int[] current = q.poll();
+			int x = current[0], y = current[1], dist = current[2];
+			if(map[x][y]=='S'){
+				grid[start][10] = dist;
+			}
+			else if(Character.isDigit(map[x][y])){
+				int point = map[x][y] - '0';
+				grid[start][point] = dist;
+			}
+			for(int k=0; k<4; k++){
+				int nx = x + row[k];
+				int ny = y + col[k];
+				if(nx >= 0 && nx < R && ny >= 0 && ny < C && !vis[nx][ny] && map[nx][ny] != '*'){
+					vis[nx][ny] = true;
+					q.add(new int[]{nx, ny, dist+1});
+				}
+			}
+		}
+	}
+	
+	static void findPermutations(int[] point, boolean[] used, int depth, int[] currentPath){
+		if(depth == point.length){
+			int total_dist = grid[10][currentPath[0]];
+			for(int i=0; i<point.length-1; i++){
+				total_dist += grid[currentPath[i]][currentPath[i+1]];
+			}
+			total_dist += grid[currentPath[point.length-1]][10];
+			minDistance = Math.min(total_dist, minDistance);
+			return;
+		}
+		
+		for(int i=0; i<point.length; i++){
+			if(!used[i]){
+				used[i] = true;
+				currentPath[depth] = point[i];
+				findPermutations(point, used, depth+1, currentPath);
+				used[i] = false;
+			}
+		}
+		
+	}
+	
+
+	public static void main(String[] args) throws Exception {
+		int ans = -1;
+		Main m = new Main();
+		m.inputData(); // 입력 받는 부분
+
+		// 여기서부터 작성
+		for(int i=0; i<R; i++){
+			for(int j=0; j<C; j++){
+				if(map[i][j] == 'S'){
+					bfs(10 , i, j);
+				} else if(Character.isDigit(map[i][j])){
+					int point = map[i][j] - '0';
+					maxPoint = Math.max(maxPoint, point);
+					bfs(point, i, j);
+				}
+			}
+		}
+		
+		int[] point = new int[maxPoint];
+		for(int i=0; i<maxPoint; i++){
+			point[i] = i+1;
+		}
+		
+		findPermutations(point, new boolean[maxPoint], 0, new int[maxPoint]);
+		
+		ans = minDistance;
+
+		System.out.println(ans); // 출력 하는 부분
+	}
+}
