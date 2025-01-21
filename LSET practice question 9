@@ -1,0 +1,136 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.*;
+
+public class Main {
+	class POS {
+		int x, y;
+		POS(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+	}
+
+	InputStreamReader reader;
+	BufferedReader br;
+	BufferedWriter bw;
+	
+	static int N;
+	static POS base[];
+	static POS pos[];
+
+	void inputData() throws Exception {
+		reader = new InputStreamReader(System.in);
+		br = new BufferedReader(reader);
+		bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st;
+
+		st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		base = new POS[2];
+		pos = new POS[N];
+		for (int i = 0; i < 2; i++) {
+			int x, y;
+			st = new StringTokenizer(br.readLine());
+			x = Integer.parseInt(st.nextToken());
+			y = Integer.parseInt(st.nextToken());
+			base[i] = new POS(x, y);
+		}
+		for (int i = 0; i < N; i++) {
+			int x, y;
+			st = new StringTokenizer(br.readLine());
+			x = Integer.parseInt(st.nextToken());
+			y = Integer.parseInt(st.nextToken());
+			pos[i] = new POS(x, y);
+		}
+	}
+	
+	static int getDistance(POS a, POS b){
+		return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+	}
+	
+	static int calculateCost(ArrayList<Integer> route, POS office, POS[] points){
+		if(route.size()==0) return 0;
+		int cost = 0;
+		int parcel = 0;
+		POS current = office;
+			
+		for(int i: route){
+			int dist = getDistance(current, points[i]);
+			cost += dist * (1+parcel);
+			parcel++;
+			current = points[i];
+		}
+		
+		cost += getDistance(current, office) * (1+parcel);
+		
+		return cost;
+	}
+	
+	static int findMinimumCost(ArrayList<Integer> route, POS office, POS[] points){
+		return permutateAndCalculate(route, 0, office, points, Integer.MAX_VALUE);
+	}
+	
+	static int permutateAndCalculate(ArrayList<Integer> route, int idx, POS office, POS[] points, int minCost){
+		if(idx==route.size()){
+			int cost = calculateCost(route, office, points);
+			return Math.min(cost, minCost);
+		}
+		
+		for(int i=idx; i<route.size(); i++){
+			swap(route, i, idx);
+			minCost = permutateAndCalculate(route, idx+1, office, points, minCost);
+			swap(route, i, idx); //Backtrack
+		}
+		
+		return minCost;
+	}
+	
+	static void swap(ArrayList<Integer> arr, int i, int j){
+		int temp = arr.get(i);
+		arr.set(i, arr.get(j));
+		arr.set(j, temp);
+	}
+	
+	static int findMinimumFuel(POS[] points, POS officeA, POS officeB){
+		
+		int minFuel = Integer.MAX_VALUE;
+		
+		for(int mask=0 ; mask < (1 << N); mask++){
+			ArrayList<Integer> routeA = new ArrayList<>();
+			ArrayList<Integer> routeB = new ArrayList<>();
+			
+			for(int i=0; i<N; i++){
+				if((mask & (1<<i)) > 0){
+					routeA.add(i);
+				}else{
+					routeB.add(i);
+				}
+			}
+			
+			int costA = findMinimumCost(routeA, officeA, points);
+			int costB = findMinimumCost(routeB, officeB, points);
+			
+			minFuel = Math.min(minFuel, costA + costB);
+			
+		}
+		return minFuel;
+	}
+
+	public static void main(String[] args) throws Exception {
+		int ans = -1;
+
+		Main m = new Main();
+
+		m.inputData(); // 입력 받는 부분 Input
+		
+		// 여기서 부터 작성 Write the code
+		ans = findMinimumFuel(pos, base[0], base[1]);
+
+		// 출력 하는 부분 Output
+		m.bw.write(ans + "\n");
+		m.bw.flush();
+	}
+}
