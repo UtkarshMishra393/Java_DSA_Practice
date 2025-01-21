@@ -1,0 +1,57 @@
+import java.util.*;
+
+public class Main {
+	static int N, K;
+	static int X[];
+	void InputData(){
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt(); // 이물질의 개수
+		K = sc.nextInt(); // 장비 최대 사용가능 횟수
+		X = new int [N]; // 이물질의 위치
+		for (int i=0; i<N; i++){
+				X[i] = sc.nextInt();
+		}
+		sc.close();
+	}
+	
+	static boolean checkmid(int v){
+		int idx = 0;
+		int check = 0;
+		while(idx<N){
+			check = check+1;
+			int range = X[idx] + 2*v;
+			while(idx<N && X[idx]<=range){
+				idx++;
+			}
+			if(check>K){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static void main(String[] args){
+		int ans = -1;
+		Main m = new Main();
+
+		m.InputData();				//	입력 함수
+
+		//	코드를 작성하세요
+		Arrays.sort(X);
+		int left = 0;
+		int right = X[N-1];
+		
+		while(left<=right){
+			int mid = left + (right-left)/2;
+			if(checkmid(mid)){
+				ans = mid;
+				right = mid-1;
+			}
+			else{
+				left = mid+1;
+			}
+		}
+		
+		System.out.println(ans);//출력
+	}
+}
