@@ -1,0 +1,43 @@
+class Solution {
+    public class Point{
+        int x;
+        int y;
+        Point(int x, int y){
+            this.x = x;
+            this.y = y;
+        }
+    }
+    public void bfs(char[][] grid, boolean[][] vis, int r, int c){
+        int[] row = {-1, 1, 0, 0};
+        int[] col = {0, 0, -1, 1};
+        Queue<Point> q = new LinkedList<>();
+        vis[r][c] = true;
+        q.add(new Point(r, c));
+        
+        while(!q.isEmpty()){
+            Point curr = q.poll();
+            int x = curr.x, y = curr.y;
+            for(int i=0; i<4; i++){
+                int nx = x + row[i];
+                int ny = y + col[i];
+                if(nx>=0 && nx< grid.length && ny >= 0 && ny < grid[0].length && !vis[nx][ny] && grid[nx][ny]== '1'){
+                    q.add(new Point(nx, ny));
+                    vis[nx][ny] = true;
+                }
+            }
+        }
+    }
+    public int numIslands(char[][] grid) {
+        int c = 0;
+        boolean vis[][] = new boolean[grid.length][grid[0].length];
+        for(int i=0; i<grid.length; i++){
+            for(int j=0; j<grid[0].length; j++){
+                if(vis[i][j]==false && grid[i][j]== '1'){
+                    bfs(grid, vis, i, j);
+                    c++;
+                }
+            }
+        }
+        return c;
+    }
+}
