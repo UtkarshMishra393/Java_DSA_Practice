@@ -1,0 +1,55 @@
+class Solution {
+    public class Point{
+        int x;
+        int y;
+        int t;
+        Point(int x, int y, int t){
+            this.x = x;
+            this.y = y;
+            this.t = t;
+        }
+    }
+
+    int c = 0;
+    
+    public int bfs(int[][] mat, Queue<Point> q){
+        int[] row = {-1, 1, 0, 0};
+        int[] col = {0, 0, -1, 1};
+        int time = 0;
+        while(!q.isEmpty()){
+            Point curr = q.poll();
+            int x = curr.x;
+            int y = curr.y;
+            int t = curr.t;
+            for(int i=0; i<4; i++){
+                int nx = x + row[i];
+                int ny = y + col[i];
+                if(nx>=0 && nx < mat.length && ny>=0 && ny < mat[0].length && mat[nx][ny] == 1){
+                    mat[nx][ny] = 2;
+                    q.add(new Point(nx, ny, t+1));
+                    c++;
+                    time = t+1;
+                }
+            }
+        }
+        
+        return time;
+    }
+    public int orangesRotting(int[][] mat) {
+        int freshOranges = 0;
+        Queue<Point> q = new LinkedList<>();
+        for(int i=0; i<mat.length; i++){
+            for(int j=0; j<mat[0].length; j++){
+                if(mat[i][j]==2){
+                    q.add(new Point(i, j, 0));
+                }
+                if(mat[i][j]==1) freshOranges++;
+            }
+        }
+        
+        int time = bfs(mat, q);
+        
+        if(c==freshOranges) return time;
+        return -1;
+    }
+}
