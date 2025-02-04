@@ -1,3 +1,5 @@
+// Solved through Topological Sorting (Kahn's Algorithm)
+
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         int[] inDegrees = new int[numCourses];
