@@ -1,0 +1,43 @@
+class iPair {
+    int first, second;
+
+    iPair(int first, int second) {
+        this.first = first;
+        this.second = second;
+    }
+}
+
+
+
+
+// User function Template for Java
+class Solution {
+    // Function to find the shortest distance of all the vertices
+    // from the source vertex src.
+    ArrayList<Integer> dijkstra(ArrayList<ArrayList<iPair>> adj, int src) {
+        // Write your code here
+        ArrayList<Integer> dist = new ArrayList<>();
+        for(int i=0; i<adj.size(); i++){
+            if(i!=src) dist.add(Integer.MAX_VALUE);
+            else dist.add(0);
+        }
+        PriorityQueue<iPair> q = new PriorityQueue<>((x, y) -> x.second - y.second);
+        q.add(new iPair(src, 0));
+        
+        while(!q.isEmpty()){
+            iPair currNode = q.poll();
+            int curr = currNode.first;
+            int dis = currNode.second;
+            for(int i=0; i<adj.get(curr).size(); i++){
+                int node = adj.get(curr).get(i).first;
+                int wt = adj.get(curr).get(i).second;
+                if(dist.get(node) > dis+wt){
+                    dist.set(node, dis+wt);
+                    q.add(new iPair(node, dist.get(node)));
+                }
+            }
+        }
+        
+        return dist;
+    }
+}
