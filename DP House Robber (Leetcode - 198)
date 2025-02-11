@@ -1,0 +1,21 @@
+class Solution {
+    public int solve(int[] nums, int n, int[] dp){
+        if(n<=0){
+            return nums[0];
+        }
+        if(dp[n] != -1){
+            return dp[n];
+        }
+        int left = solve(nums, n-1, dp);
+        int right = nums[n];
+        if(n>1) right = solve(nums, n-2, dp) + nums[n];
+        return dp[n] = Math.max(left, right);
+    }
+    public int rob(int[] nums) {
+        int[] dp = new int[nums.length];
+        for(int i=0; i<dp.length; i++){
+            dp[i] = -1;
+        }
+        return solve(nums, nums.length-1, dp);
+    }
+}
