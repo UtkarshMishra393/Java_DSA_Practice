@@ -19,3 +19,20 @@ class Solution {
         return solve(nums, nums.length-1, dp);
     }
 }
+
+// Using Tabulation(Reduced Space Complexity to O(1))
+class Solution {
+    public int rob(int[] nums) {
+        int prev2 = -1;
+        int prev = nums[0];
+        for(int i=1; i<nums.length; i++){
+            int left = prev;
+            int right = nums[i];
+            if(i>1) right = prev2 + nums[i];
+            int curr = Math.max(left, right);
+            prev2 = prev;
+            prev = curr;
+        }
+        return prev;
+    }
+}
