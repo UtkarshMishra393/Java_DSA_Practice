@@ -1,0 +1,28 @@
+class Solution {
+    public int solve(int[] nums, int s, int e, int[] dp){
+        if(e<=s){
+            return nums[s];
+        }
+        
+        if(dp[e]!=-1){
+            return dp[e];
+        }
+        int left = solve(nums, s, e-1, dp);
+        int right = nums[e];
+        if(e>s+1) right = solve(nums, s, e-2, dp) + nums[e];
+        return dp[e] = Math.max(left, right);
+    }
+    public int rob(int[] nums) {
+        if(nums.length==1) return nums[0];
+        int[] dp = new int[nums.length];
+        for(int i=0; i<dp.length; i++){
+            dp[i] = -1;
+        }
+        int withStart = solve(nums, 0, nums.length-2, dp);
+        for(int i=0; i<dp.length; i++){
+            dp[i] = -1;
+        }
+        int withEnd = solve(nums, 1, nums.length-1, dp);
+        return Math.max(withStart, withEnd);
+    }
+}
