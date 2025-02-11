@@ -1,0 +1,69 @@
+// Normally through Recursion (It will give TLE)
+class Solution {
+    int solve(int[] height, int n){
+        if(n<1){
+            return 0;
+        }
+        
+        int right = Integer.MAX_VALUE;
+        int left = solve(height, n-1) + Math.abs(height[n] - height[n-1]);
+        if(n>1) right = solve(height, n-2) + Math.abs(height[n] - height[n-2]);
+        return Math.min(left, right);
+    }
+    int minCost(int[] height) {
+        return solve(height, height.length-1);   
+    }
+}
+
+
+// Through DP array using Memoization (TC = O(n), SC = O(n) + O(n), time and space complexity reduced)
+class Solution {
+    int solve(int[] height, int n, int[] dp){
+        if(n<1){
+            return 0;
+        }
+        if(dp[n]!=0) return dp[n];
+        int right = Integer.MAX_VALUE;
+        int left = solve(height, n-1, dp) + Math.abs(height[n] - height[n-1]);
+        if(n>1) right = solve(height, n-2, dp) + Math.abs(height[n] - height[n-2]);
+        return dp[n] = Math.min(left, right);
+    }
+    int minCost(int[] height) {
+        int[] dp = new int[height.length];
+        return solve(height, height.length-1, dp);   
+    }
+}
+
+
+// Using Tabulation method (Space Complexity Reduced, SC = O(n))
+class Solution {
+    int minCost(int[] height) {
+        int[] dp = new int[height.length];
+        dp[0] = 0;
+        for(int i=1; i<dp.length; i++){
+            int left = dp[i-1] + Math.abs(height[i] - height[i-1]);
+            int right = Integer.MAX_VALUE;
+            if(i>1) right = dp[i-2] + Math.abs(height[i] - height[i-2]);
+            dp[i] = Math.min(left, right);
+        }
+        return dp[dp.length-1];
+    }
+}
+
+
+// Fabonacci using Tabulation Method (Space Complexity Reduced, SC = O(1))
+class Solution {
+    int minCost(int[] height) {
+        int prev1 = 0;
+        int prev2 = 0;
+        for(int i=1; i<height.length; i++){
+            int left = prev1 + Math.abs(height[i] - height[i-1]);
+            int right = Integer.MAX_VALUE;
+            if(i>1) right = prev2 + Math.abs(height[i] - height[i-2]);
+            int curr = Math.min(left, right);
+            prev2 = prev1;
+            prev1 = curr;
+        }
+        return prev1;
+    }
+}
