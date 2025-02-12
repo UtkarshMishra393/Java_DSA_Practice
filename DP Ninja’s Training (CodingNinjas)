@@ -1,5 +1,4 @@
 // Using Memoization
-
 public class Solution {
     public static int solve(int[][] arr, int days, int prev, int[][] dp){
         if(days==0){
@@ -40,7 +39,6 @@ public class Solution {
 
 
 // Using Tabulation (Reducing Space Complexity by removing Recusrsion stack)
-
 public class Solution {
     public static int ninjaTraining(int n, int arr[][]) {
         int[][] dp = new int[n][4];
@@ -63,5 +61,32 @@ public class Solution {
         }
 
         return dp[n-1][3];
+    }
+}
+
+// Using Tabulation (Space Optimization)
+public class Solution {
+    public static int ninjaTraining(int n, int arr[][]) {
+        int[] lastDay_dp = new int[4];
+        lastDay_dp[0] = Math.max(arr[0][1], arr[0][2]);
+        lastDay_dp[1] = Math.max(arr[0][0], arr[0][2]);
+        lastDay_dp[2] = Math.max(arr[0][0], arr[0][1]);
+        lastDay_dp[3] = Math.max(arr[0][1], Math.max(arr[0][1], arr[0][2]));
+
+
+        for(int days=1; days<n; days++){
+            int[] currDay = new int[4];
+            for(int prev=0; prev<4; prev++){
+                currDay[prev] = 0;
+                for(int k=0; k<3; k++){
+                    if(k!=prev){
+                        currDay[prev] = Math.max(currDay[prev], lastDay_dp[k] + arr[days][k]);
+                    }
+                }
+            }
+            lastDay_dp = currDay;
+        }
+
+        return lastDay_dp[3];
     }
 }
