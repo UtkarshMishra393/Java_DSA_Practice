@@ -64,7 +64,7 @@ public class Solution {
     }
 }
 
-// Using Tabulation (Space Optimization)
+// Using Tabulation (Space Optimization:- SC = O(4))
 public class Solution {
     public static int ninjaTraining(int n, int arr[][]) {
         int[] lastDay_dp = new int[4];
