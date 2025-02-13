@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 public class Main {
 	static int N;
-	char map[][];
+	static char map[][];
 
 	static char ans; //구매자 이름 Buyer's name
 	static int areacnt; //구매자 영역 개수 Number of buyer's area
@@ -17,109 +17,82 @@ public class Main {
 		bf.close();
 	}
 	
-static int Rz = 0;
-static int Gz = 0;
-static int Bz = 0;
-static int Rgrid = 0;
-static int Ggrid = 0;
-static int Bgrid = 0;
-	
-	public class Pair{
-		int r = 0;
-		int c = 0;
-		Pair(int r, int c){
-			this.r = r;
-			this.c = c;
+	public static class Pair{
+		int x;
+		int y;
+		Pair(int x, int y){
+			this.x = x;
+			this.y = y;
 		}
 	}
 	
-	void Solve_BFS(int[][] isVisited, int r, int c){
-		
-		Queue<Pair> q = new LinkedList<>();
-		
-		q.add(new Pair(r, c));
-		
-		isVisited[r][c] = 1;
+	static int[][] owners = new int[3][2];
+	
+	static void bfs(boolean[][] vis, int i, int j){
 		
 		int[] row = {-1, 0, 1, 0};
 		int[] col = {0, 1, 0, -1};
 		
-		char x = map[r][c];
-		int grids = 0;
+		Queue<Pair> q = new LinkedList<>();
+		q.add(new Pair(i, j));
+		vis[i][j] = true;
+		char check = map[i][j];
+		int grids = 1;
 		
 		while(!q.isEmpty()){
-			int a = q.peek().r;
-			int b = q.peek().c;
-			
-			grids++;
-			q.remove();
-			
-			for(int i=0; i<4; i++){
-				if(a+row[i] < 0 || a+row[i] >= N || b+col[i] < 0 || b+col[i] >= N || (isVisited[a + row[i]][b + col[i]] == 1) || (map[a + row[i]][b + col[i]] != map[a][b])){
-					continue;
+			Pair curr = q.poll();
+			int x = curr.x;
+			int y = curr.y;
+			for(int k=0; k<4; k++){
+				int nx = x + row[k];
+				int ny = y + col[k];
+				if(nx >= 0 && ny >= 0 && nx < N && ny < N && !vis[nx][ny] && map[nx][ny]==check){
+					vis[nx][ny] = true;
+					q.add(new Pair(nx, ny));
+					grids++;
 				}
-				
-				isVisited[a + row[i]][b + col[i]] = 1;
-				q.add(new Pair(a + row[i], b + col[i]));
 			}
 		}
 		
-		if(x == 'R'){
-			Rgrid += grids;
-			Rz++;
-		}
-		else if(x== 'G'){
-			Ggrid += grids;
-			Gz++;
-		}
-		else{
-			Bgrid += grids;
-			Bz++;
-		}
+		if(check=='R'){
+			owners[0][0]++;
+			owners[0][1] += grids;
+		} else if(check == 'G'){
+			owners[1][0]++;
+			owners[1][1] += grids;
+		} else{
+			owners[2][0]++;
+			owners[2][1] += grids;
+		}	
 	}
 	
-	public static class Owner{
-		int zoneCount = 0;
-		int gridCount = 0;
-		Owner(int z, int g){
-			this.zoneCount = z;
-			this.gridCount = g;
-		}
-	}
+	
 
 	public static void main(String[] args) throws IOException {
 		Main m = new Main();
 		m.InputData(); //입력 Input
-		
-		int[][] isVisited = new int[N][N];
-		
+
+		//여기서부터 작성 Write from here
+		boolean[][] vis = new boolean[N][N];
 		for(int i=0; i<N; i++){
 			for(int j=0; j<N; j++){
-				if(isVisited[i][j] != 1){
-					m.Solve_BFS(isVisited, i, j);
+				if(vis[i][j] != true){
+					bfs(vis, i, j);
 				}
 			}
 		}
 		
-		Owner[] owners = new Owner[3];
-		
-		owners[0] = new Owner(Rz, Rgrid);
-		owners[1] = new Owner(Gz, Ggrid);
-		owners[2] = new Owner(Bz, Bgrid);
-			
-		int maxZones = -1, maxGrids = -1;
-		for (int i = 0; i < 3; i++) {
-			if (owners[i].zoneCount > maxZones || 
-					(owners[i].zoneCount == maxZones && owners[i].gridCount > maxGrids) || 
-					(owners[i].zoneCount == maxZones && owners[i].gridCount == maxGrids && i < (ans == 'R' ? 0 : ans == 'G' ? 1 : 2))) {
-				maxZones = owners[i].zoneCount;
-				maxGrids = owners[i].gridCount;
-				ans = (i == 0 ? 'R' : i == 1 ? 'G' : 'B');
+		int maxZones = 0, maxGrids = 0;
+		for(int i=0; i<3; i++){
+			if((owners[i][0] > maxZones) || (owners[i][0] == maxZones && owners[i][1] > maxGrids) || (owners[i][0] == maxZones && owners[i][1] > maxGrids && i < (ans == 'R'? 0: ans == 'G'? 1: 2)) ){
+				maxZones = owners[i][0];
+				maxGrids = owners[i][1];
+				ans = (i==0? 'R': i==1? 'G':'B');
 			}
-  	}
+		}
 		
 		areacnt = maxZones;
-		
+
 		//출력 Output
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		bw.write(String.valueOf(m.ans) + " " + String.valueOf(m.areacnt) + "\n");
