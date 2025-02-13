@@ -1,0 +1,60 @@
+import java.util.*;
+
+public class Main {
+	static int N; // 이동 정보의 개수
+	static String Info; // 정사각형을 생성하고자 하는 배열
+
+	void InputData() {
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt();
+		Info = sc.next();
+
+		sc.close();
+	}
+		
+	public static class Pair{
+		String node;
+		String par;
+		Pair(String a, String b){
+			this.node = a;
+			this.par = b;
+		}
+	}
+
+	public static void main(String[] args) {
+		int sol = 0;
+		Main m = new Main();
+
+		m.InputData(); // 입력 받는 부분
+
+		// 여기서부터 작성
+		int[][] arr = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+		Map<String, HashSet<String>> map = new HashMap<>();
+		int x = 0, y = 0;
+		map.put("0,0", new HashSet<String>());
+		for(int i=0; i<N; i++){
+			int c = Info.charAt(i) - '0';
+			int newx = x + arr[c][0];
+			int newy = y + arr[c][1];
+			String a = x + "," + y;
+			String b = newx + "," + newy;
+			
+			
+			if(map.containsKey(b)){
+				if(!map.get(b).contains(a)){
+					sol++;
+					map.get(b).add(a);
+					map.get(a).add(b);
+				}
+			}
+			else{
+				map.put(b, new HashSet<String>());
+				map.get(b).add(a);
+				map.get(a).add(b);
+			}
+			x = newx;
+			y = newy;
+		}	
+		System.out.println(sol);
+	}
+}
