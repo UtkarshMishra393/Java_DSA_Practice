@@ -1,38 +1,17 @@
-	int Solve(){
-		int sol = (int)1e7, max_cnt = 0;
-		for (int i = 0; i < N; i++){
-			int ret = CalLargestBlock(ID[i]);
-			if ((max_cnt < ret) || ((max_cnt == ret) && (sol < ID[i]))) {
-				max_cnt = ret;
-				sol = ID[i];
-			}
+int CalLargestBlock(int id_ignore){
+	int max_block_size = 0;
+	int cur_size = 0;
+	int prev = 0;
+	for (int i = 0; i < N; i++){
+		if ((ID[i] != id_ignore) && ID[i] == prev) cur_size++;
+		else if(ID[i] != id_ignore){
+			prev = ID[i];
+			cur_size = 1;
 		}
-		return sol;
-	}
-	void InputData() throws IOException {
-		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-		N = Integer.parseInt(bf.readLine());
-		ID = new int[N];
-		String in[] = bf.readLine().split(" ");
-		for (int i = 0; i < N; i++){
-			ID[i] = Integer.parseInt(in[i]);
+		
+		if (max_block_size < cur_size) {
+			max_block_size = cur_size;
 		}
-		bf.close();
 	}
-	void OutputData(int ans) throws IOException {
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		bw.write(String.valueOf(ans) + "\n");
-		bw.flush();
-		bw.close();
-	}
-	public static void main(String[] args) throws IOException {
-		Main m = new Main();
-		// 입력받는 부분
-		m.InputData();
-
-		int ans = m.Solve();
-
-		// 출력하는 부분
-		m.OutputData(ans);
-	}
+	return max_block_size;
 }
