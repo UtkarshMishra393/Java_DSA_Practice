@@ -1,0 +1,29 @@
+class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+        if(image[sr][sc]==color){
+            return image;
+        }
+        int target = image[sr][sc];
+        image[sr][sc] = color;
+
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[]{sr, sc});
+        int row[] = {0, 0, -1, 1};
+        int col[] = {-1, 1, 0, 0};
+        
+        while(!q.isEmpty()){
+            int curr[]= q.poll();
+            int x = curr[0], y = curr[1];
+
+            for(int i=0; i<4; i++){
+                int nx = x + row[i];
+                int ny = y + col[i];
+                if(nx>=0 && ny>=0 && nx<image.length && ny<image[0].length && image[nx][ny]==target){
+                    image[nx][ny] = color;
+                    q.add(new int[]{nx, ny});
+                }
+            }
+        }
+        return image;
+    }
+}
