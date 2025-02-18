@@ -1,0 +1,38 @@
+class Solution {
+    public int[][] updateMatrix(int[][] mat) {
+        int n = mat.length, m = mat[0].length;
+        Queue<int[]> q = new LinkedList<>();
+        boolean[][] vis = new boolean[n][m];
+
+        for(int i=0; i<mat.length; i++){
+            for(int j=0; j<mat[0].length; j++){
+                if(mat[i][j]==0){
+                    q.add(new int[]{i, j, 0});
+                    vis[i][j] = true;
+                }
+            }
+        }
+
+        int dist[][] = new int[n][m];
+        
+
+        int[] row = {0, 0, -1, 1};
+        int[] col = {1, -1, 0, 0};
+
+        while(!q.isEmpty()){
+            int curr[] = q.poll();
+            int x = curr[0], y = curr[1], moves = curr[2];
+            dist[x][y] = moves;
+            for(int k=0; k<4; k++){
+                int nx = row[k] + x;
+                int ny = col[k] + y;
+                if(nx >= 0 && ny >= 0 && nx<n && ny<m && !vis[nx][ny]){
+                    vis[nx][ny] = true;
+                    q.add(new int[]{nx, ny, moves+1});
+                }
+            }
+        }
+
+        return dist;
+    }
+}
