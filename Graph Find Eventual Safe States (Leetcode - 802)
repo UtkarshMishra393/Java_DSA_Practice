@@ -1,3 +1,4 @@
+// Through Cycle Detection (Faster)
 class Solution {
     public boolean dfs(int[][] graph, boolean[] vis, boolean[] check, boolean[] pathVis, int curr){
         vis[curr] = true;
@@ -38,6 +39,59 @@ class Solution {
             }
         }
 
+        return ans;
+    }
+}
+
+
+
+// Through Topological Sort (Slower)
+class Solution {
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+        int r = graph.length;
+        ArrayList<Integer>[] reversedGraph = new ArrayList[r];
+
+        for(int i=0; i<r; i++){
+            reversedGraph[i] = new ArrayList<Integer>();
+        }
+
+        for(int i=0; i<r; i++){
+            for(int j=0; j<graph[i].length; j++){
+                reversedGraph[graph[i][j]].add(i);
+            }
+        }
+
+        int[] inDegree = new int[r];
+        for(int i=0; i<r; i++){
+            for(int j=0; j<reversedGraph[i].size(); j++){
+                inDegree[reversedGraph[i].get(j)]++;
+            }
+        }
+
+        Stack<Integer> st = new Stack<>();
+        ArrayList<Integer> ans = new ArrayList<>();
+        Queue<Integer> q = new LinkedList<>();
+
+        for(int i=0; i<r; i++){
+            if(inDegree[i]==0){
+                q.add(i);
+                ans.add(i);
+            }
+        }
+
+        while(!q.isEmpty()){
+            int curr = q.poll();
+            for(int i=0; i<reversedGraph[curr].size(); i++){
+                int node = reversedGraph[curr].get(i);
+                inDegree[node]--;
+                if(inDegree[node]==0){
+                    ans.add(node);
+                    q.add(node);
+                }
+            }
+        }
+
+        Collections.sort(ans);
         return ans;
     }
 }
