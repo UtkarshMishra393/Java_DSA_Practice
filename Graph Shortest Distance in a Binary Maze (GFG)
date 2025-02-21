@@ -1,0 +1,33 @@
+class Solution {
+
+    int shortestPath(int[][] grid, int[] source, int[] destination) {
+        int r = grid.length, c = grid[0].length;
+        if(grid[source[0]][source[1]]==0 || grid[destination[0]][destination[1]]==0){
+            return -1;
+        }
+        Queue<int[]> q = new LinkedList<>();
+        int[] row = {-1, 0, 1, 0};
+        int[] col = {0, 1, 0, -1};
+
+        grid[source[0]][source[1]] = 0;       
+
+        q.add(new int[]{source[0], source[1], 0});
+
+        while(!q.isEmpty()){
+            int[] curr = q.poll();
+            int x = curr[0], y = curr[1], moves = curr[2];
+            if(x == destination[0] && y == destination[1]){
+                return moves;
+            }
+            for(int i=0; i<4; i++){
+                int nx = x + row[i];
+                int ny = y + col[i];
+                if(nx >=0 && ny>=0 && nx<r && ny<c && grid[nx][ny]==1){
+                    grid[nx][ny] = 0;
+                    q.add(new int[]{nx, ny, moves+1});
+                }
+            }
+        }
+        return -1;
+    }
+}
