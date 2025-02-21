@@ -19,6 +19,8 @@ class Solution {
             adj[flights[i][0]].add(new Pair(flights[i][1], flights[i][2], 0));
         }
 
+        // No need to apply Priority Queue beacuse we need to go according to the minimum number of stops
+        // that will be automatically minimum at the top of the queue because that us moves or levels only and moves just increase ascending order.
         Queue<Pair> q = new LinkedList<>();
         q.add(new Pair(src, 0, 0));
 
