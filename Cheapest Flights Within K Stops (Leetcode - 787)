@@ -1,0 +1,47 @@
+class Solution {
+    public class Pair{
+        int node;
+        int wt;
+        int stop;
+        Pair(int a, int b, int c){
+            this.node = a;
+            this.wt = b;
+            this.stop = c;
+        }
+    }
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        ArrayList<Pair>[] adj = new ArrayList[n];
+        for(int i=0; i<n; i++){
+            adj[i] = new ArrayList<Pair>();
+        }
+
+        for(int i=0; i<flights.length; i++){
+            adj[flights[i][0]].add(new Pair(flights[i][1], flights[i][2], 0));
+        }
+
+        Queue<Pair> q = new LinkedList<>();
+        q.add(new Pair(src, 0, 0));
+
+        int dist[] = new int[n];
+        for(int i=0; i<n; i++){
+            if(i!=src) dist[i] = Integer.MAX_VALUE;
+        }
+
+        while(!q.isEmpty()){
+            Pair p = q.poll();
+            int curr = p.node;
+            int dis = p.wt;
+            int stops = p.stop;
+            for(int i=0; i<adj[curr].size(); i++){
+                int node = adj[curr].get(i).node;
+                int wt = adj[curr].get(i).wt;
+                if((dist[node] > dis + wt) && (stops<=k)){
+                    dist[node] = dis + wt;
+                    q.add(new Pair(node, dist[node], stops+1));
+                }
+            }
+        }
+        if(dist[dst] == Integer.MAX_VALUE) return -1;
+        return dist[dst];
+    }
+}
