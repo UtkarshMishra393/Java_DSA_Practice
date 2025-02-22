@@ -1,0 +1,54 @@
+class Solution {
+    public class Pair{
+        int node;
+        long wt;
+        Pair(int a , long b){
+            this.node = a;
+            this.wt = b;
+        }
+    }
+    public int countPaths(int n, int[][] roads) {
+        ArrayList<Pair>[] adj = new ArrayList[n];
+        for(int i=0; i<n; i++){
+            adj[i] = new ArrayList<Pair>();
+        }
+
+        for(int i=0; i<roads.length; i++){
+            adj[roads[i][0]].add(new Pair(roads[i][1], roads[i][2]));
+            adj[roads[i][1]].add(new Pair(roads[i][0], roads[i][2]));
+        }
+        
+        PriorityQueue<Pair> q = new PriorityQueue<>((x, y) -> (int)(x.wt - y.wt));
+        long time[] = new long[n];
+        for(int i=1; i<n; i++){
+            time[i] = Long.MAX_VALUE;
+        }
+
+        q.add(new Pair(0, 0));
+
+        int[] ways = new int[n];
+        ways[0] = 1;
+
+        int mod = (int)(1e9 + 7);
+
+        while(!q.isEmpty()){
+            Pair p = q.poll();
+            int curr = p.node;
+            long t = p.wt;
+            for(int i=0; i<adj[curr].size(); i++){
+                int node = adj[curr].get(i).node;
+                long wt = adj[curr].get(i).wt;
+                if(time[node] > t+wt){
+                    time[node] = t + wt;
+                    q.add(new Pair(node, time[node]));
+                    ways[node] = ways[curr];
+                }
+                else if(time[node] == t+wt){
+                    ways[node] = (ways[node] + ways[curr]) % mod;
+                }
+            }
+        }
+        int ans = ways[n-1];
+        return ans;
+    }
+}
