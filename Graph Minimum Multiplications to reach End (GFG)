@@ -1,0 +1,39 @@
+class Solution {
+    public class Pair{
+        int node;
+        int step;
+        Pair(int a, int b){
+            this.node = a;
+            this.step = b;
+        }
+    }
+    int minimumMultiplications(int[] arr, int start, int end) {
+        Queue<Pair> q = new LinkedList<>();
+        int[] dist = new int[(int)1e5];
+        for(int i=0; i<dist.length; i++){
+            dist[i] = Integer.MAX_VALUE;
+        }
+        dist[start] = 0;
+        
+        q.add(new Pair(start, 0));
+        
+        int mod = (int)(1e5);
+        
+        while(!q.isEmpty()){
+            Pair p = q.poll();
+            int curr = p.node;
+            int steps = p.step;
+            if(curr == end){
+                return steps;
+            }
+            for(int i: arr){
+                int next = (curr*i) % mod;
+                if(dist[next] > steps+1){
+                    dist[next] = steps+1;
+                    q.add(new Pair(next, dist[next]));
+                }
+            }
+        }
+        return -1;
+    }
+}
