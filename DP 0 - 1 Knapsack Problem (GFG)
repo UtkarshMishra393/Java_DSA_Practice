@@ -1,0 +1,26 @@
+class Solution {
+    static int solve(int capacity, int[] val, int[] wt, int idx, int[][] dp){
+        if(idx < 0 || capacity <= 0) return 0;
+        
+        if(dp[idx][capacity] != -1){
+            return dp[idx][capacity];
+        }
+        
+        int notTake = solve(capacity, val, wt, idx-1, dp);
+        int take = Integer.MIN_VALUE;
+        if(wt[idx] <= capacity){
+            take = val[idx] + solve(capacity - wt[idx], val, wt, idx-1, dp);
+        }
+        
+        return dp[idx][capacity] = Math.max(take, notTake);
+    }
+    static int knapSack(int capacity, int val[], int wt[]) {
+        int[][] dp = new int[val.length][capacity+1];
+        for(int i=0; i<val.length; i++){
+            for(int j=0; j<capacity+1; j++){
+                dp[i][j] = -1;
+            }
+        }
+        return solve(capacity, val, wt, val.length-1, dp);
+    }
+}
