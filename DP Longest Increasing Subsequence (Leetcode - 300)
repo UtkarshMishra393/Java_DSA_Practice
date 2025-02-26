@@ -1,3 +1,4 @@
+// Through DP Memoization 
 class Solution {
     public int solve(int[] nums, int i, int prev, int[][] dp){
         if(i<0) return 0;
@@ -21,5 +22,35 @@ class Solution {
             }
         }
         return solve(nums, n-1, -1, dp);
+    }
+}
+
+
+// Through Binary Search (Faster Approach)
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        int n = nums.length;
+        List<Integer> arr = new ArrayList<>();
+        arr.add(nums[0]);
+        for(int i=1; i<n; i++){
+            if(nums[i] > arr.get(arr.size()-1)){
+                arr.add(nums[i]);
+            }
+            else{
+                int s = 0;
+                int e = arr.size()-1;
+                while(s<e){
+                    int mid = s + (e-s)/2;
+                    if(nums[i] > arr.get(mid)){
+                        s = mid+1;
+                    }
+                    else{
+                        e = mid;
+                    }
+                }
+                arr.set(e, nums[i]);
+            }
+        }
+        return arr.size();
     }
 }
