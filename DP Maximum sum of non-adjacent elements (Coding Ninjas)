@@ -1,0 +1,23 @@
+import java.util.* ;
+import java.io.*; 
+import java.util.*;
+public class Solution {
+	public static int solve(ArrayList<Integer> arr, int n, int i, int[] dp){
+		if(i<0) return 0;
+		if(i==0) return arr.get(0);
+
+		if(dp[i] != -1) return dp[i];
+		
+		int take = Integer.MIN_VALUE;
+		take = arr.get(i) + solve(arr, n, i-2, dp);
+		int notTake = solve(arr, n, i-1, dp);
+
+		return dp[i] = Math.max(take, notTake);
+	}
+	public static int maximumNonAdjacentSum(ArrayList<Integer> nums) {
+		int n = nums.size();
+		int[] dp = new int[n];
+		Arrays.fill(dp, -1);
+		return solve(nums, n, n-1, dp);
+	}
+}
