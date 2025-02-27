@@ -1,0 +1,23 @@
+import java.util.Arrays;
+public class Solution {
+    static int solve(int[] arr, int n, int k, int i, int[] dp){
+        if(i==0) return 0;
+
+        if(dp[i] != -1) return dp[i];
+
+        int min = Integer.MAX_VALUE;
+        for(int j=1; j<=k; j++){
+            if(i-j >= 0){
+                int cost = Math.abs(arr[i] - arr[i-j]) + solve(arr, n, k, i-j, dp);
+                min =  Math.min(min, cost);
+            }
+        }
+
+        return dp[i] = min;
+    }
+    public static int minimizeCost(int n, int k, int []height){
+        int[] dp = new int[n];
+        Arrays.fill(dp, -1);
+        return solve(height, n, k, n-1, dp);
+    }
+}
