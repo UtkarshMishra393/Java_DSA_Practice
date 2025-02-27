@@ -1,0 +1,20 @@
+class Solution {
+    public int solve(List<List<Integer>> arr, int i, int j, int n, int[][] dp){
+        if(i==n) return 0;
+
+        if(dp[i][j] != -1) return dp[i][j];
+
+        int pick1 = arr.get(i).get(j) + solve(arr, i+1, j, n, dp);
+        int pick2 = arr.get(i).get(j) + solve(arr, i+1, j+1, n, dp);
+
+        return dp[i][j] = Math.min(pick1, pick2);
+    }
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int n = triangle.size();
+        int[][] dp = new int[n][n];
+        for(int i=0; i<n; i++){
+            Arrays.fill(dp[i], -1);
+        }
+        return solve(triangle, 0, 0, n, dp);
+    }
+}
