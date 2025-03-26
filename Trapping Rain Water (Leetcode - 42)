@@ -1,0 +1,66 @@
+// Approach -1 (with space O(2N))
+class Solution {
+    public int trap(int[] height) {
+        int n = height.length;
+        int[] prefixMax = new int[n];
+        int[] sufixMax = new int[n];
+
+        prefixMax[0] = height[0];
+        sufixMax[n-1] = height[n-1];
+
+        for(int i=1; i<n; i++){
+            prefixMax[i] = Math.max(prefixMax[i-1], height[i]);
+        }
+        for(int i=n-2; i>=0; i--){
+            sufixMax[i] = Math.max(sufixMax[i+1], height[i]);
+        }
+
+        int ans = 0;
+        for(int i=0; i<n; i++){
+            int leftMax = prefixMax[i];
+            int rightMax = sufixMax[i];
+            if(leftMax>height[i] && height[i]<rightMax){
+                ans += Math.min(leftMax, rightMax) - height[i];
+            }
+        }
+
+        return ans;
+    }
+}
+
+
+
+// Approach - 2 (with Space O(1))
+class Solution {
+    public int trap(int[] height) {
+        int n = height.length;
+
+        int ans = 0;
+
+        int leftMax = 0;
+        int rightMax = 0;
+
+        int s = 0;
+        int e = n-1;
+        while(s<=e){
+            
+            if(height[s]<=height[e]){
+                if(leftMax>height[s]){
+                    ans += leftMax - height[s];
+                } else{
+                    leftMax = height[s];
+                }
+                s++;
+            }else{
+                if(rightMax>height[e]){
+                    ans += rightMax - height[e];
+                } else{
+                    rightMax = height[e];
+                }
+                e--;
+            }
+        }
+
+        return ans;
+    }
+}
